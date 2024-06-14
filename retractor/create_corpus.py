@@ -41,9 +41,9 @@ def trim_entity_spans(data: list) -> list:
 
 def convert_dataturks_to_spacy(file_json: str) -> list:
     try:
-        training_data = []
-        with open(file_json, 'r', encoding="utf8") as f:
-            lines = f.readlines()
+        train_data = []
+        with open(file_json, 'r', encoding="utf8") as file:
+            lines = file.readlines()
 
         for line in lines:
             data = json.loads(line)
@@ -52,21 +52,18 @@ def convert_dataturks_to_spacy(file_json: str) -> list:
             if data['annotation'] is not None:
                 for annotation in data['annotation']:
                     point = annotation['points'][0]
-                    labels = annotation['label']
-                    if not isinstance(labels, list):
-                        labels = [labels]
+                    label = annotation['label'][0]
 
-                    for label in labels:
-                        # dataturks ставит индексы оба вкл. [start, end]
-                        # но в spacy последний искл. [start, end)
-                        entities.append((
-                            point['start'],
-                            point['end'] + 1,
-                            label
-                        ))
+                    # dataturks ставит индексы оба вкл. [start, end]
+                    # но в spacy последний искл. [start, end)
+                    entities.append((
+                        point['start'],
+                        point['end'] + 1,
+                        label
+                    ))
 
-            training_data.append((text, {"entities": entities}))
-        return training_data
+            train_data.append((text, {"entities": entities}))
+        return train_data
     except Exception:
         logging.exception("Unable to process " + file_json)
         return None
