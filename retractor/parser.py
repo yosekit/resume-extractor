@@ -59,7 +59,7 @@ class ResumeParser(object):
             'email': None,
             'mobile_number': None,
             'skills': None,
-            'skills_sections': None,
+            'skills_entities': None,
             'education_level': None,
             'education': None,
             'college_name': None,
@@ -90,7 +90,7 @@ class ResumeParser(object):
             pass
 
         try:
-            details['skills_sections'] = entities['Skills']
+            details['skills_entities'] = entities['Skills']
         except KeyError:
             pass
 

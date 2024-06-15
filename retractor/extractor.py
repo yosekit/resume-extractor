@@ -44,25 +44,21 @@ class ResumeExtractor(object):
         """
 
         text_split = [i.strip() for i in text.split('\n')]
-        # sections_in_resume = [i for i in text_split if i.lower() in sections]
         entities = {}
-        key = False
+        curr_section = False
         for phrase in text_split:
-            if len(phrase) == 1:
-                p_key = phrase
-            else:
-                p_key = set(phrase.lower().split()) & set(cs.RESUME_SECTIONS_GRAD)
+            sections = set(phrase.lower().split()) & set(cs.RESUME_SECTIONS_GRAD)
 
             try:
-                p_key = list(p_key)[0]
+                section = list(sections)[0]
+
+                entities[section] = []
+                curr_section = section
             except IndexError:
                 pass
             
-            if p_key in cs.RESUME_SECTIONS_GRAD:
-                entities[p_key] = []
-                key = p_key
-            elif key and phrase.strip():
-                entities[key].append(phrase)
+            if curr_section and phrase.strip():
+                entities[curr_section].append(phrase)
 
         return entities
 
