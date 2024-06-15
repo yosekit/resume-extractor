@@ -43,10 +43,10 @@ class ResumeExtractor(object):
         :return: dictionary of entities
         """
 
-        text_split = [i.strip() for i in text.split('\n')]
+        phrases = [i.strip() for i in text.split('\n')]
         entities = {}
         curr_section = False
-        for phrase in text_split:
+        for phrase in phrases:
             sections = set(phrase.lower().split()) & set(cs.RESUME_SECTIONS_GRAD)
 
             try:
